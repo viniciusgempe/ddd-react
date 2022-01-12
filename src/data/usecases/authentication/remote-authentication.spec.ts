@@ -2,6 +2,8 @@ import { HttpClientSpi } from "@/data/test/mock-http-client";
 import { RemoteAuthentication } from "./remote-authentication";
 import faker from "faker";
 import { mockAuthentication } from "@/domain/test/mock-authentication";
+import { InvalidCredentialsError } from "@/domain/erros/InvalidCredentialsError";
+import { HttpResponseStatus } from "@/data/protocols/http/http-response";
 interface SutTypes {
   sut: RemoteAuthentication;
   httpClientSpi: HttpClientSpi;
@@ -30,5 +32,13 @@ describe("RemoteAuthentication", () => {
     const authenticationParams = mockAuthentication();
     await sut.auth(authenticationParams);
     expect(httpClientSpi.body).toBe(authenticationParams);
+  });
+  test("Should throw InvalidCredentialsError", async () => {
+    const { httpClientSpi, sut } = makeType();
+    httpClientSpi.response = {
+      statusCode: HttpResponseStatus.unauthorized
+    }
+    const promisse = sut.auth(mockAuthentication());
+    await expect(promisse).rejects.toThrow(new InvalidCredentialsError());
   });
 });
