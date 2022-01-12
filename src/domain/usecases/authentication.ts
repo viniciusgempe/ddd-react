@@ -1,6 +1,6 @@
 import { IAccountModel } from "../models/account-model";
 
-interface IAuthenticationParams {
+export interface IAuthenticationParams {
   email: string;
   password: string;
 }
