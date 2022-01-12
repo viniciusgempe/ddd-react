@@ -5,13 +5,15 @@ import { mockAuthentication } from "@/domain/test/mock-authentication";
 import { InvalidCredentialsError } from "@/domain/erros/InvalidCredentialsError";
 import { UnexpectError } from "@/domain/erros/UnexpectError";
 import { HttpResponseStatus } from "@/data/protocols/http/http-response";
+import { IAccountModel } from "@/domain/models/account-model";
+import { IAuthenticationParams } from "@/domain/usecases/authentication";
 interface SutTypes {
   sut: RemoteAuthentication;
-  httpClientSpi: HttpClientSpi;
+  httpClientSpi: HttpClientSpi<IAuthenticationParams, IAccountModel>;
 }
 
 const makeType = (url: string = faker.internet.url()): SutTypes => {
-  const httpClientSpi = new HttpClientSpi();
+  const httpClientSpi = new HttpClientSpi<IAuthenticationParams, IAccountModel>();
   const sut = new RemoteAuthentication(url, httpClientSpi);
 
   return {
