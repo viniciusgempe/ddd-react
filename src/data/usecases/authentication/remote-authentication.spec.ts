@@ -3,6 +3,7 @@ import { RemoteAuthentication } from "./remote-authentication";
 import faker from "faker";
 import { mockAuthentication } from "@/domain/test/mock-authentication";
 import { InvalidCredentialsError } from "@/domain/erros/InvalidCredentialsError";
+import { UnexpectError } from "@/domain/erros/UnexpectError";
 import { HttpResponseStatus } from "@/data/protocols/http/http-response";
 interface SutTypes {
   sut: RemoteAuthentication;
@@ -33,12 +34,36 @@ describe("RemoteAuthentication", () => {
     await sut.auth(authenticationParams);
     expect(httpClientSpi.body).toBe(authenticationParams);
   });
-  test("Should throw InvalidCredentialsError", async () => {
+  test("Should throw InvalidCredentialsError 401", async () => {
     const { httpClientSpi, sut } = makeType();
     httpClientSpi.response = {
       statusCode: HttpResponseStatus.unauthorized
     }
     const promisse = sut.auth(mockAuthentication());
     await expect(promisse).rejects.toThrow(new InvalidCredentialsError());
+  });
+  test("Should throw UnexpectError 400", async () => {
+    const { httpClientSpi, sut } = makeType();
+    httpClientSpi.response = {
+      statusCode: HttpResponseStatus.unexpect
+    }
+    const promisse = sut.auth(mockAuthentication());
+    await expect(promisse).rejects.toThrow(new UnexpectError());
+  });
+  test("Should throw InternalError 500", async () => {
+    const { httpClientSpi, sut } = makeType();
+    httpClientSpi.response = {
+      statusCode: HttpResponseStatus.unexpect
+    }
+    const promisse = sut.auth(mockAuthentication());
+    await expect(promisse).rejects.toThrow(new UnexpectError());
+  });
+  test("Should throw UnexpectError 404", async () => {
+    const { httpClientSpi, sut } = makeType();
+    httpClientSpi.response = {
+      statusCode: HttpResponseStatus.notFound
+    }
+    const promisse = sut.auth(mockAuthentication());
+    await expect(promisse).rejects.toThrow(new UnexpectError());
   });
 });
