@@ -1,4 +1,4 @@
-import { HttpPostClient, HttpPostParams } from "../protocols/http/http-post-client";
+import { HttpPostClient, HttpPostParams } from "@/data/protocols/http/http-post-client";
 
 export class HttpClientSpi implements HttpPostClient {
   url?: string;

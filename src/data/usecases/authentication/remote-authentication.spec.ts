@@ -1,7 +1,7 @@
-import { HttpClientSpi } from "../../../data/test/mock-http-client";
+import { HttpClientSpi } from "@/data/test/mock-http-client";
 import { RemoteAuthentication } from "./remote-authentication";
 import faker from "faker";
-import { mockAuthentication } from "../../../domain/test/mock-authentication";
+import { mockAuthentication } from "@/domain/test/mock-authentication";
 interface SutTypes {
   sut: RemoteAuthentication;
   httpClientSpi: HttpClientSpi;
